@@ -9,11 +9,15 @@ public class Playermovement : MonoBehaviour
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float groundDistance = 1f;
     [SerializeField] private float moveSpeed = 5f;
+    private Transform cam;
     
     private void Start()
     {
         inputManager = GetComponent<playerInputManager>();
         rb = GetComponent<Rigidbody>();
+        cam = Camera.main.transform;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
     private void Update()
     {
@@ -32,7 +36,8 @@ public class Playermovement : MonoBehaviour
         float horizontalInput = inputManager.HorizontalInput;
         float verticalInput = inputManager.VerticalInput;
 
-        Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+        Vector3 moveDirection = cam.forward * verticalInput + cam.right * horizontalInput; 
+        moveDirection.Normalize();
         Vector3 moveVelocity = moveDirection * moveSpeed;
 
         rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
