@@ -16,6 +16,11 @@ public class PlayerManager : MonoBehaviour
             gameManager.IncreasePlayerScore();
             Destroy(other.gameObject);
         }
+        if (other.CompareTag("death"))
+        {
+            Destroy(other.gameObject);
+            gameManager.killPlayer(gameObject);
+        }
     }
 
 }
