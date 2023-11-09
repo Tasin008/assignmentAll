@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class Playermovement : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Playermovement : MonoBehaviour
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float groundDistance = 1f;
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private CinemachineFreeLook freeLookCam;
     private Transform cam;
     
     private void Start()
@@ -22,6 +24,7 @@ public class Playermovement : MonoBehaviour
     private void Update()
     {
         inputManager.HandleAllInputs();
+        HandleRotation();
     }
     private void FixedUpdate()
     {
@@ -41,6 +44,13 @@ public class Playermovement : MonoBehaviour
         Vector3 moveVelocity = moveDirection * moveSpeed;
 
         rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
+    }
+
+    private void HandleRotation()
+    {
+        Quaternion targetRot = freeLookCam.State.FinalOrientation;
+        Quaternion newRot = new Quaternion(0f, targetRot.y, 0f, targetRot.w);
+        transform.rotation = newRot;
     }
 
     private bool isGrounded()
